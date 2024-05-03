@@ -6,7 +6,7 @@
 /*   By: bpisak-l <bpisak-l@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/01 15:31:23 by bpisak-l          #+#    #+#             */
-/*   Updated: 2024/05/03 11:37:11 by bpisak-l         ###   ########.fr       */
+/*   Updated: 2024/05/03 13:19:55 by bpisak-l         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,15 +48,26 @@ int	args_valid(int argc, char const *argv[], char **msg)
 	return (1);
 }
 
+void	handler(int signum)
+{
+	(void)signum;
+}
+
 int	main(int argc, char const *argv[])
 {
 	pid_t	server_pid;
+	pid_t	own_pid;
 	char	*msg;
 
+	own_pid = getpid();
+	ft_printf("client pid %d\n", own_pid);
 	msg = NULL;
 	if (!args_valid(argc, argv, &msg))
 		return (1);
 	server_pid = (pid_t)ft_atoi(argv[1]);
+	kill(server_pid, SIGUSR1);
+	signal(SIGUSR1, handler);
+	pause();
 	msg = ft_strdup("heya hey");
 	send_char(msg[0], server_pid);
 	free(msg);
