@@ -6,7 +6,7 @@
 /*   By: bpisak-l <bpisak-l@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/01 15:31:16 by bpisak-l          #+#    #+#             */
-/*   Updated: 2024/05/03 15:02:15 by bpisak-l         ###   ########.fr       */
+/*   Updated: 2024/05/03 16:18:30 by bpisak-l         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,7 +53,7 @@ int	init_connection()
 	set_client_pid_form_signal();
 	signal(SIGUSR1, handler);
 	signal(SIGUSR2, handler);
-	usleep(100);
+	usleep(35);
 	client_pid = g_res;
 	kill(client_pid, SIGUSR1);
 	return (client_pid);
@@ -61,10 +61,10 @@ int	init_connection()
 
 void	confirm_received(pid_t	client_pid)
 {
-	ft_printf("received from client %d: %c\n", client_pid, g_res);
+	ft_printf("%c", g_res);
 	signal(SIGUSR1, handler);
 	signal(SIGUSR2, handler);
-	usleep(1000);
+	usleep(150);
 	kill(client_pid, SIGUSR1);
 }
 

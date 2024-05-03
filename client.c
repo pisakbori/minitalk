@@ -6,7 +6,7 @@
 /*   By: bpisak-l <bpisak-l@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/01 15:31:23 by bpisak-l          #+#    #+#             */
-/*   Updated: 2024/05/03 15:01:41 by bpisak-l         ###   ########.fr       */
+/*   Updated: 2024/05/03 16:19:51 by bpisak-l         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,6 +59,7 @@ int	main(int argc, char const *argv[])
 	char	*msg;
 	int		i;
 
+	signal(SIGUSR1, handler);
 	own_pid = getpid();
 	ft_printf("client pid %d\n", own_pid);
 	msg = NULL;
@@ -66,9 +67,8 @@ int	main(int argc, char const *argv[])
 		return (1);
 	server_pid = (pid_t)ft_atoi(argv[1]);
 	kill(server_pid, SIGUSR1);
-	signal(SIGUSR1, handler);
 	pause();
-	msg = ft_strdup("heya hey");
+	msg = ft_strdup("heya hey\n");
 	i = -1;
 	while (msg[++i])
 	{
