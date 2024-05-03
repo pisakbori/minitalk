@@ -6,35 +6,13 @@
 /*   By: bpisak-l <bpisak-l@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/01 15:31:23 by bpisak-l          #+#    #+#             */
-/*   Updated: 2024/05/03 13:19:55 by bpisak-l         ###   ########.fr       */
+/*   Updated: 2024/05/03 15:01:41 by bpisak-l         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minitalk.h"
 
 // int globalVariable;
-
-void	send_char(char c, pid_t server_pid)
-{
-	char	bit;
-	char	i;
-
-	i = 8;
-	ft_printf("sending char %d\n", c);
-	while (i--)
-	{
-		bit = c & 0b10000000;
-		ft_printf("bit: %d\n", !!(c & 0b10000000));
-		// ft_printf("%d", !!(c & 0b10000000));
-		if (!bit)
-			kill(server_pid, SIGUSR1);
-		else
-			kill(server_pid, SIGUSR2);
-		usleep(100);
-		c = c << 1;
-	}
-}
-
 
 int	args_valid(int argc, char const *argv[], char **msg)
 {
@@ -48,8 +26,29 @@ int	args_valid(int argc, char const *argv[], char **msg)
 	return (1);
 }
 
+void	send_char(char c, pid_t server_pid)
+{
+	char	bit;
+	char	i;
+
+	i = 8;
+	ft_printf("sending char %d\n", c);
+	while (i--)
+	{
+		bit = c & 0b10000000;
+		if (bit)
+			kill(server_pid, SIGUSR2);
+		else
+			kill(server_pid, SIGUSR1);
+		usleep(100);
+		c = c << 1;
+	}
+	ft_printf("char sent\n");
+}
+
 void	handler(int signum)
 {
+	ft_printf("signal from server %d\n", signum);
 	(void)signum;
 }
 
@@ -58,6 +57,7 @@ int	main(int argc, char const *argv[])
 	pid_t	server_pid;
 	pid_t	own_pid;
 	char	*msg;
+	int		i;
 
 	own_pid = getpid();
 	ft_printf("client pid %d\n", own_pid);
@@ -69,7 +69,18 @@ int	main(int argc, char const *argv[])
 	signal(SIGUSR1, handler);
 	pause();
 	msg = ft_strdup("heya hey");
-	send_char(msg[0], server_pid);
+	i = -1;
+	while (msg[++i])
+	{
+		signal(SIGUSR1, handler);
+		usleep(100);
+		send_char(msg[i], server_pid);
+		ft_printf("after usleep, waiting for confirm from srv\n");
+		pause();
+		ft_printf("after pause\n");
+	}
+	ft_printf("before sending null terminator\n");
+	send_char(0, server_pid);
 	free(msg);
 	// kill(server_pid, SIGUSR1);
 	return (0);
