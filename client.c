@@ -6,18 +6,21 @@
 /*   By: bpisak-l <bpisak-l@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/01 15:31:23 by bpisak-l          #+#    #+#             */
-/*   Updated: 2024/05/04 16:20:37 by bpisak-l         ###   ########.fr       */
+/*   Updated: 2024/05/04 17:02:47 by bpisak-l         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minitalk.h"
 
-int	args_valid(int argc, char const *argv[], char **msg)
+unsigned int g_server_exists;
+
+void	validate_pid(pid_t pid, const char *arg)
 {
-	if (argc != 3)
-		return (1);
-	*msg = ft_strdup(argv[2]);
-	return (1);
+	if (ft_strncmp(ft_itoa(pid), arg, ft_strlen(arg)) || pid < 0)
+	{
+		write(2, "Invalid server pid.\n", 20);
+		exit (1);
+	}
 }
 
 void	send_char(char c, pid_t server_pid)
@@ -41,28 +44,36 @@ void	send_char(char c, pid_t server_pid)
 void	handler(int signum)
 {
 	(void)signum;
+	g_server_exists = 1;
 	usleep(40);
 }
 
 int	main(int argc, char const *argv[])
 {
 	pid_t	server_pid;
-	pid_t	own_pid;
-	char	*msg;
 	int		i;
 
+	g_server_exists = 0;
 	usleep(100000); // if starts at same time as server..?
-	signal(SIGUSR1, handler);
-	own_pid = getpid();
-	msg = NULL;
-	if (!args_valid(argc, argv, &msg))
+	if (argc != 3)
+	{
+		write(2, "Correct usage: ./client <server_pid> <message_string>\n", 54);
 		return (1);
+	}
+	signal(SIGUSR1, handler);
 	server_pid = (pid_t)ft_atoi(argv[1]);
+	validate_pid(server_pid, argv[1]);
+	kill(server_pid, SIGUSR1);
+	usleep(100);
+	if (!g_server_exists)
+	{
+		write(2, "Error: Server is not running.\n", 30);
+		return (1);
+	}
 	kill(server_pid, SIGUSR1);
 	i = -1;
-	while (msg[++i])
-		send_char(msg[i], server_pid);
+	while (argv[2][++i])
+		send_char(argv[2][i], server_pid);
 	send_char(0, server_pid);
-	free(msg);
 	return (0);
 }

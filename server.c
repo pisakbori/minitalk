@@ -6,7 +6,7 @@
 /*   By: bpisak-l <bpisak-l@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/01 15:31:16 by bpisak-l          #+#    #+#             */
-/*   Updated: 2024/05/04 16:25:46 by bpisak-l         ###   ########.fr       */
+/*   Updated: 2024/05/04 17:04:46 by bpisak-l         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,6 +36,8 @@ void	set_client_pid_form_signal(void)
 	sa1.sa_flags = SA_SIGINFO;
 	sigaction(SIGUSR1, &sa1, NULL);
 	usleep(35);
+	pause();
+	kill(g_res, SIGUSR1);
 	pause();
 	sigemptyset(&sa1.sa_mask);
 	sa1.sa_handler = SIG_DFL;
@@ -69,7 +71,7 @@ int	main(void)
 
 	pid = getpid();
 	printf("%d\n", pid);
-	while(1)
+	while (1)
 	{
 		client_pid = init_connection();
 		while (g_res)
