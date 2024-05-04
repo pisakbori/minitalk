@@ -6,7 +6,7 @@
 /*   By: bpisak-l <bpisak-l@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/01 15:31:16 by bpisak-l          #+#    #+#             */
-/*   Updated: 2024/05/04 17:12:03 by bpisak-l         ###   ########.fr       */
+/*   Updated: 2024/05/04 17:36:20 by bpisak-l         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,17 +53,21 @@ int	init_connection(void)
 	signal(SIGUSR2, handler);
 	usleep(35);
 	client_pid = g_res;
+	ft_printf("%d : ", client_pid);
 	kill(client_pid, SIGUSR1);
 	return (client_pid);
 }
 
 int	main(void)
 {
-	int					i;
-	pid_t				pid;
-	pid_t				client_pid;
+	int				i;
+	int				strlen;
+	pid_t			pid;
+	pid_t			client_pid;
+	char			buffer[1000];
 
 	pid = getpid();
+	strlen = 0;
 	printf("%d\n", pid);
 	while (1)
 	{
@@ -78,7 +82,13 @@ int	main(void)
 				usleep(70);
 				kill(client_pid, SIGUSR1);
 			}
-			ft_printf("%c", g_res);
+			buffer[strlen] = g_res;
+			strlen++;
+			if (strlen == 1000 || !g_res)
+			{
+				write(1, buffer, strlen);
+				strlen = 0;
+			}
 		}
 		ft_printf("\n");
 	}
