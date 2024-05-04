@@ -6,22 +6,18 @@
 /*   By: bpisak-l <bpisak-l@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/01 15:31:23 by bpisak-l          #+#    #+#             */
-/*   Updated: 2024/05/03 16:19:51 by bpisak-l         ###   ########.fr       */
+/*   Updated: 2024/05/04 14:56:00 by bpisak-l         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minitalk.h"
 
-// int globalVariable;
+// int g_var;
 
 int	args_valid(int argc, char const *argv[], char **msg)
 {
 	if (argc != 3)
-	{
-		// ft_printf("Correct usage: ./client <server pid> <message string>\n");
-		// return (0);
 		return (1);
-	}
 	*msg = ft_strdup(argv[2]);
 	return (1);
 }
@@ -32,24 +28,23 @@ void	send_char(char c, pid_t server_pid)
 	char	i;
 
 	i = 8;
-	ft_printf("sending char %d\n", c);
 	while (i--)
 	{
 		bit = c & 0b10000000;
+		pause();
 		if (bit)
 			kill(server_pid, SIGUSR2);
 		else
 			kill(server_pid, SIGUSR1);
-		usleep(100);
 		c = c << 1;
 	}
-	ft_printf("char sent\n");
 }
 
 void	handler(int signum)
 {
-	ft_printf("signal from server %d\n", signum);
+	// g_var = signum;
 	(void)signum;
+	usleep(35);
 }
 
 int	main(int argc, char const *argv[])
@@ -59,29 +54,19 @@ int	main(int argc, char const *argv[])
 	char	*msg;
 	int		i;
 
+	usleep(100); // if starts at same time as server..?
 	signal(SIGUSR1, handler);
 	own_pid = getpid();
-	ft_printf("client pid %d\n", own_pid);
 	msg = NULL;
 	if (!args_valid(argc, argv, &msg))
 		return (1);
 	server_pid = (pid_t)ft_atoi(argv[1]);
 	kill(server_pid, SIGUSR1);
-	pause();
-	msg = ft_strdup("heya hey\n");
+	msg = ft_strdup("yaheya heyaheya heyaheya heyaheyaa heyaheya heyaheya heyaheyayaheya heyaheya heyaheya heyaheya heyaheya heyaheya heyaheyayaheya heyaheya heyaheya a heyaheya heyaheya heyaheyayaheya heyaheya heyaheya heyaheya heyaheya heyaheya heyaheyaa heyaheya heyaheya heyaheyayaheya heyaheya heyaheya heyaheya heyaheya heyaheya heyaheyaa heyaheya heyaheya heyaheyayaheya heyaheya heyaheya heyaheya heyaheya heyaheya heyaheyaa heyaheya heyaheya heyaheyayaheya heyaheya heyaheya heyaheyaheya 8\n");
 	i = -1;
 	while (msg[++i])
-	{
-		signal(SIGUSR1, handler);
-		usleep(100);
 		send_char(msg[i], server_pid);
-		ft_printf("after usleep, waiting for confirm from srv\n");
-		pause();
-		ft_printf("after pause\n");
-	}
-	ft_printf("before sending null terminator\n");
 	send_char(0, server_pid);
 	free(msg);
-	// kill(server_pid, SIGUSR1);
 	return (0);
 }

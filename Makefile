@@ -12,13 +12,13 @@ NAME			= minitalk
 all: $(NAME)
 
 $(NAME): $(OBJS) $(LIBFT) client server
-	./server
+	./server & server_pid=$$! && ./client $$server_pid
 
 client: $(LIBFT)
-	$(CC) $(CFLAGS) $(LFLAGS) client.c -o client $(OBJS) $(LIBFT)
+	@$(CC) $(CFLAGS) $(LFLAGS) client.c -o client $(OBJS) $(LIBFT)
 
 server: $(LIBFT)
-	$(CC) $(CFLAGS) $(LFLAGS) server.c -o server $(OBJS) $(LIBFT)
+	@$(CC) $(CFLAGS) $(LFLAGS) server.c -o server $(OBJS) $(LIBFT)
 
 $(LIBFT):
 	make -C libft

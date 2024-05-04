@@ -6,7 +6,7 @@
 /*   By: bpisak-l <bpisak-l@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/01 15:31:16 by bpisak-l          #+#    #+#             */
-/*   Updated: 2024/05/03 16:18:30 by bpisak-l         ###   ########.fr       */
+/*   Updated: 2024/05/04 14:51:25 by bpisak-l         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,7 @@ void	handler(int signum)
 		g_res = g_res + 1;
 }
 
-void set_client_pid_form_signal()
+void	set_client_pid_form_signal(void)
 {
 	struct sigaction	sa1;
 
@@ -39,32 +39,22 @@ void set_client_pid_form_signal()
 	sigemptyset(&sa1.sa_mask);
 	sa1.sa_handler = SIG_DFL;
 	sigaction(SIGUSR1, &sa1, NULL);
-	// if (sigaction(SIGUSR1, &sa1, NULL) < 0)
-	// {
-	// 	perror("sigaction");
-	// 	return (EXIT_FAILURE);
-	// }
 }
 
 int	init_connection()
 {
-	pid_t				client_pid;
+	pid_t	client_pid;
 
 	set_client_pid_form_signal();
 	signal(SIGUSR1, handler);
 	signal(SIGUSR2, handler);
-	usleep(35);
 	client_pid = g_res;
 	kill(client_pid, SIGUSR1);
 	return (client_pid);
 }
 
-void	confirm_received(pid_t	client_pid)
+void	approve_send_next_bit(pid_t	client_pid)
 {
-	ft_printf("%c", g_res);
-	signal(SIGUSR1, handler);
-	signal(SIGUSR2, handler);
-	usleep(150);
 	kill(client_pid, SIGUSR1);
 }
 
@@ -77,17 +67,21 @@ int	main(void)
 
 	pid = getpid();
 	printf("%d\n", pid);
-	//loop here forever for waiting for msg from different clients
-	client_pid = init_connection();
-	while (g_res) //end of string
+	while(1)
 	{
-		i = 8;
-		g_res = 0;
-		while (i--)
+		client_pid = init_connection();
+		while (g_res) //end of string
 		{
-			pause();
+			i = 8;
+			g_res = 0;
+			while (i--)
+			{
+				pause();
+				approve_send_next_bit(client_pid);
+			}
+			ft_printf("%c", g_res);
 		}
-		confirm_received(client_pid);
+		ft_printf("\n");
 	}
 	return (0);
 }
