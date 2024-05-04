@@ -6,13 +6,13 @@
 /*   By: bpisak-l <bpisak-l@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/01 15:31:23 by bpisak-l          #+#    #+#             */
-/*   Updated: 2024/05/04 17:02:47 by bpisak-l         ###   ########.fr       */
+/*   Updated: 2024/05/04 17:08:34 by bpisak-l         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minitalk.h"
 
-unsigned int g_server_exists;
+unsigned int	g_server_exists;
 
 void	validate_pid(pid_t pid, const char *arg)
 {
@@ -54,7 +54,6 @@ int	main(int argc, char const *argv[])
 	int		i;
 
 	g_server_exists = 0;
-	usleep(100000); // if starts at same time as server..?
 	if (argc != 3)
 	{
 		write(2, "Correct usage: ./client <server_pid> <message_string>\n", 54);

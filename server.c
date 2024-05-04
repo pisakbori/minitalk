@@ -6,13 +6,13 @@
 /*   By: bpisak-l <bpisak-l@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/01 15:31:16 by bpisak-l          #+#    #+#             */
-/*   Updated: 2024/05/04 17:04:46 by bpisak-l         ###   ########.fr       */
+/*   Updated: 2024/05/04 17:12:03 by bpisak-l         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minitalk.h"
 
-unsigned int g_res;
+unsigned int	g_res;
 
 void	set_client_pid(int signum, siginfo_t *info, void *ptr)
 {
@@ -57,12 +57,6 @@ int	init_connection(void)
 	return (client_pid);
 }
 
-void	approve_send_next_bit(pid_t	client_pid)
-{
-	kill(client_pid, SIGUSR1);
-}
-
-// int	main(int argc, char const *argv[])
 int	main(void)
 {
 	int					i;
@@ -82,7 +76,7 @@ int	main(void)
 			{
 				pause();
 				usleep(70);
-				approve_send_next_bit(client_pid);
+				kill(client_pid, SIGUSR1);
 			}
 			ft_printf("%c", g_res);
 		}
