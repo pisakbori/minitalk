@@ -6,7 +6,7 @@
 /*   By: bpisak-l <bpisak-l@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/01 15:31:23 by bpisak-l          #+#    #+#             */
-/*   Updated: 2024/05/04 15:07:37 by bpisak-l         ###   ########.fr       */
+/*   Updated: 2024/05/04 15:43:02 by bpisak-l         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,7 +54,7 @@ int	main(int argc, char const *argv[])
 	char	*msg;
 	int		i;
 
-	usleep(1000); // if starts at same time as server..?
+	usleep(100000); // if starts at same time as server..?
 	signal(SIGUSR1, handler);
 	own_pid = getpid();
 	msg = NULL;
