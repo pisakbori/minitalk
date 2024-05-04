@@ -6,7 +6,7 @@
 /*   By: bpisak-l <bpisak-l@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/01 15:31:16 by bpisak-l          #+#    #+#             */
-/*   Updated: 2024/05/04 15:07:58 by bpisak-l         ###   ########.fr       */
+/*   Updated: 2024/05/04 16:25:46 by bpisak-l         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,21 +35,21 @@ void	set_client_pid_form_signal(void)
 	sa1.__sigaction_u.__sa_sigaction = set_client_pid;
 	sa1.sa_flags = SA_SIGINFO;
 	sigaction(SIGUSR1, &sa1, NULL);
-	// usleep(35);
+	usleep(35);
 	pause();
 	sigemptyset(&sa1.sa_mask);
 	sa1.sa_handler = SIG_DFL;
 	sigaction(SIGUSR1, &sa1, NULL);
 }
 
-int	init_connection()
+int	init_connection(void)
 {
 	pid_t	client_pid;
 
 	set_client_pid_form_signal();
 	signal(SIGUSR1, handler);
 	signal(SIGUSR2, handler);
-	// usleep(35);
+	usleep(35);
 	client_pid = g_res;
 	kill(client_pid, SIGUSR1);
 	return (client_pid);
@@ -72,14 +72,14 @@ int	main(void)
 	while(1)
 	{
 		client_pid = init_connection();
-		while (g_res) //end of string
+		while (g_res)
 		{
 			i = 8;
 			g_res = 0;
 			while (i--)
 			{
-				// usleep(35);
 				pause();
+				usleep(70);
 				approve_send_next_bit(client_pid);
 			}
 			ft_printf("%c", g_res);

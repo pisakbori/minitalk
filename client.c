@@ -6,13 +6,11 @@
 /*   By: bpisak-l <bpisak-l@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/01 15:31:23 by bpisak-l          #+#    #+#             */
-/*   Updated: 2024/05/04 15:43:02 by bpisak-l         ###   ########.fr       */
+/*   Updated: 2024/05/04 16:20:37 by bpisak-l         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minitalk.h"
-
-// int g_var;
 
 int	args_valid(int argc, char const *argv[], char **msg)
 {
@@ -42,9 +40,8 @@ void	send_char(char c, pid_t server_pid)
 
 void	handler(int signum)
 {
-	// g_var = signum;
 	(void)signum;
-	usleep(35);
+	usleep(40);
 }
 
 int	main(int argc, char const *argv[])
