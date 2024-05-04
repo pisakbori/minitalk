@@ -6,7 +6,7 @@
 /*   By: bpisak-l <bpisak-l@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/01 15:31:23 by bpisak-l          #+#    #+#             */
-/*   Updated: 2024/05/04 14:56:00 by bpisak-l         ###   ########.fr       */
+/*   Updated: 2024/05/04 15:07:37 by bpisak-l         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,7 +54,7 @@ int	main(int argc, char const *argv[])
 	char	*msg;
 	int		i;
 
-	usleep(100); // if starts at same time as server..?
+	usleep(1000); // if starts at same time as server..?
 	signal(SIGUSR1, handler);
 	own_pid = getpid();
 	msg = NULL;
@@ -62,7 +62,6 @@ int	main(int argc, char const *argv[])
 		return (1);
 	server_pid = (pid_t)ft_atoi(argv[1]);
 	kill(server_pid, SIGUSR1);
-	msg = ft_strdup("yaheya heyaheya heyaheya heyaheyaa heyaheya heyaheya heyaheyayaheya heyaheya heyaheya heyaheya heyaheya heyaheya heyaheyayaheya heyaheya heyaheya a heyaheya heyaheya heyaheyayaheya heyaheya heyaheya heyaheya heyaheya heyaheya heyaheyaa heyaheya heyaheya heyaheyayaheya heyaheya heyaheya heyaheya heyaheya heyaheya heyaheyaa heyaheya heyaheya heyaheyayaheya heyaheya heyaheya heyaheya heyaheya heyaheya heyaheyaa heyaheya heyaheya heyaheyayaheya heyaheya heyaheya heyaheyaheya 8\n");
 	i = -1;
 	while (msg[++i])
 		send_char(msg[i], server_pid);

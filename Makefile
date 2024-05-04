@@ -12,7 +12,7 @@ NAME			= minitalk
 all: $(NAME)
 
 $(NAME): $(OBJS) $(LIBFT) client server
-	./server & server_pid=$$! && ./client $$server_pid
+	@./server & server_pid=$$! && ./client $$server_pid "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa 70"
 
 client: $(LIBFT)
 	@$(CC) $(CFLAGS) $(LFLAGS) client.c -o client $(OBJS) $(LIBFT)
