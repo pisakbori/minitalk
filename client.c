@@ -6,7 +6,7 @@
 /*   By: bpisak-l <bpisak-l@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/01 15:31:23 by bpisak-l          #+#    #+#             */
-/*   Updated: 2024/05/04 17:08:34 by bpisak-l         ###   ########.fr       */
+/*   Updated: 2024/05/07 13:51:27 by bpisak-l         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,9 +43,21 @@ void	send_char(char c, pid_t server_pid)
 
 void	handler(int signum)
 {
-	(void)signum;
-	g_server_exists = 1;
-	usleep(40);
+	if (signum == SIGUSR2)
+		ft_printf("(Seen)\n");
+	else
+	{
+		g_server_exists = 1;
+		usleep(40);
+	}
+}
+
+void	finalize(pid_t	server_pid)
+{
+	send_char(0, server_pid);
+	signal(SIGUSR1, SIG_IGN);
+	signal(SIGUSR2, handler);
+	pause();
 }
 
 int	main(int argc, char const *argv[])
@@ -66,13 +78,13 @@ int	main(int argc, char const *argv[])
 	usleep(100);
 	if (!g_server_exists)
 	{
-		write(2, "Error: Server is not running.\n", 30);
+		write(2, "Error: Server is not available.\n", 30);
 		return (1);
 	}
 	kill(server_pid, SIGUSR1);
 	i = -1;
 	while (argv[2][++i])
 		send_char(argv[2][i], server_pid);
-	send_char(0, server_pid);
+	finalize(server_pid);
 	return (0);
 }
