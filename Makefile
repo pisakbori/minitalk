@@ -3,12 +3,9 @@ CFLAGS			= -Wall -Werror -Wextra -I./libft
 LIBFT_FLAGS		= -Llibft
 LFLAGS			= $(LIBFT_FLAGS)
 RM				= rm -rf
-SRC				=
-OBJS			= $(SRC:.c=.o)
 MINILIBX		= mlx/libmlx.a
 LIBFT			= libft/libft.a
 NAME			= minitalk
-TEST_STR_UNI	= "Known as ฟองมัน, or informally the bird's eye ตาไก่ , this symbol can be used to indicate the beginning of paragraphs, but is now used only for special poetic"
 TEST_MSG		= @./server & server_pid=$$! && ./client $$server_pid "$$(cat msg.txt)" && kill $$server_pid;
 
 all: $(NAME)
@@ -19,10 +16,10 @@ test: $(NAME)
 	$(TEST_MSG)
 
 client: $(LIBFT)
-	$(CC) $(CFLAGS) $(LFLAGS) client.c -o client $(OBJS) $(LIBFT)
+	$(CC) $(CFLAGS) $(LFLAGS) client.c -o client $(LIBFT)
 
 server: $(LIBFT)
-	$(CC) $(CFLAGS) $(LFLAGS) server.c -o server $(OBJS) $(LIBFT)
+	$(CC) $(CFLAGS) $(LFLAGS) server.c -o server $(LIBFT)
 
 $(LIBFT):
 	make -C libft

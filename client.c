@@ -6,7 +6,7 @@
 /*   By: bpisak-l <bpisak-l@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/01 15:31:23 by bpisak-l          #+#    #+#             */
-/*   Updated: 2024/05/07 13:51:27 by bpisak-l         ###   ########.fr       */
+/*   Updated: 2024/05/08 13:13:45 by bpisak-l         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@ unsigned int	g_server_exists;
 
 void	validate_pid(pid_t pid, const char *arg)
 {
-	if (ft_strncmp(ft_itoa(pid), arg, ft_strlen(arg)) || pid < 0)
+	if (ft_strncmp(ft_itoa(pid), arg, ft_strlen(arg)) || pid <= 0)
 	{
 		write(2, "Invalid server pid.\n", 20);
 		exit (1);
